@@ -1,0 +1,29 @@
+#!/usr/bin/racket
+#lang racket/base
+;
+; Find Racket packages required by the installation tree.
+;
+
+(require racket/path
+         racket/match
+         setup/getinfo)
+
+
+(for ((info-path (in-lines))
+      #:unless (regexp-match? #rx"/test-pkgs/" info-path))
+  (let ((info-ref (get-info/full (path-only info-path))))
+    (when info-ref
+      (for ((dep (info-ref 'deps (λ () null))))
+        (match dep
+          ((? string?)
+           (printf "racket(~a)\n" dep))
+
+          ((list name '#:platform platform)
+           (when (regexp-match? #rx"linux" platform)
+             (printf "racket(~a)\n" name)))
+
+          ((list name '#:version _)
+           (printf "racket(~a)\n" name)))))))
+
+
+; vim:set ft=racket ts=2 sw=2 et:

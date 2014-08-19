@@ -1,0 +1,3 @@
+%__racket_provides %{_rpmconfigdir}/racket.prov
+%__racket_requires %{_rpmconfigdir}/racket.req
+%__racket_path ^/usr/share/racket.*/(info\.rkt|info\.ss)$

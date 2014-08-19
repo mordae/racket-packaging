@@ -1,0 +1,29 @@
+#!/usr/bin/racket
+#lang racket/base
+;
+; Find Racket packages provided by the installation tree.
+;
+
+(require racket/path
+         setup/getinfo)
+
+
+(define (dirname path)
+  (let-values (((dir file _) (split-path path)))
+    (values dir)))
+
+(define (basename path)
+  (let-values (((dir file _) (split-path path)))
+    (values file)))
+
+
+(for ((info-path (in-lines))
+      #:unless (regexp-match? #rx"/test-pkgs/" info-path))
+  (let* ((path (dirname info-path))
+         (info-ref (get-info/full path)))
+    (when info-ref
+      (when (info-ref 'collection (λ () #f))
+        (printf "racket(~a)\n" (basename path))))))
+
+
+; vim:set ft=racket ts=2 sw=2 et:
