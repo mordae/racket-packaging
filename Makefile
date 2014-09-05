@@ -3,12 +3,18 @@
 package = $(shell grep ^Name: *.spec | awk '{print $$2}')
 version = $(shell grep ^Version: *.spec | awk '{print $$2}')
 
+prefix = /usr
+rpmdir = ${prefix}/lib/rpm
+libexecdir = ${prefix}/libexec
+
 all:
 
 install:
-	install -m755 -D rpm/racket.req ${DESTDIR}/usr/lib/rpm/racket.req
-	install -m755 -D rpm/racket.prov ${DESTDIR}/usr/lib/rpm/racket.prov
-	install -m644 -D rpm/racket.attr ${DESTDIR}/usr/lib/rpm/fileattrs/racket.attr
+	install -m755 -D rpm/racket.req ${DESTDIR}${rpmdir}/racket.req
+	install -m755 -D rpm/racket.prov ${DESTDIR}${rpmdir}/racket.prov
+	install -m644 -D rpm/racket.attr ${DESTDIR}${rpmdir}/fileattrs/racket.attr
+	install -m755 -D libexec/racket-build ${DESTDIR}${libexecdir}/racket-build
+	install -m755 -D libexec/racket-install ${DESTDIR}${libexecdir}/racket-install
 
 clean:
 

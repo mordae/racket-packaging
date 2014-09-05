@@ -29,6 +29,7 @@ make install DESTDIR="${RPM_BUILD_ROOT}"
 rm -rf "${RPM_BUILD_ROOT}"
 
 %files
+%{_libexecdir}/*
 %{_rpmconfigdir}/racket.*
 %{_rpmconfigdir}/fileattrs/racket.*
 
