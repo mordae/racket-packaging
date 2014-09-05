@@ -1,29 +1,17 @@
 #!/bin/bash -e
 
-if [ -z "${PLTUSERHOME}" ]; then
-	export PLTUSERHOME="${PWD}"
-fi
+export PLTUSERHOME="${PWD}"
 
 export pkgsdir="${RPM_BUILD_ROOT}/usr/share/racket/extra-pkgs"
 export docsdir="${RPM_BUILD_ROOT}/usr/share/doc/racket"
 
+export srcdir="${PLTUSERHOME}"/.racket/*/pkgs/"${1}"
+
 mkdir -p "${pkgsdir}"
 mkdir -p "${docsdir}"
 
-for path in "${@}"; do
-	pushd "${path}"
-
-	name="$(basename "${PWD}")"
-
-	mkdir -p "${pkgsdir}/${name}"
-	tar -cpf- --exclude='doc' . | tar -xf- -C "${pkgsdir}/${name}"
-
-	find . -type f -name out0.sxref -printf '%h\n' \
-	| while read module; do
-		cp -R "${module}" "${docsdir}/"
-	done
-
-	popd
-done
+mkdir -p "${pkgsdir}/${1}"
+tar -xzf "${1}.tgz" --exclude='doc' -C "${pkgsdir}/${1}"
+tar -xzf "${1}.tgz" -C "${docsdir}" '*/doc' --strip-components=2
 
 # EOF

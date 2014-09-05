@@ -1,5 +1,5 @@
 Name:		racket-packaging
-Version:	2
+Version:	3
 Release:	1%{?dist}
 Summary:	RPM utilities for Racket packaging
 

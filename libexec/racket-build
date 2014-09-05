@@ -1,28 +1,16 @@
 #!/bin/bash -e
 
-# local-user-redirect.js is only used in user packages,
-# but we intend to build a system-wide package...
-html_sed=('s#<script[^>]*/local-user-redirect.js"[^>]*></script>##g')
+export PLTUSERHOME="${PWD}"
 
-if [ -z "${PLTUSERHOME}" ]; then
-	export PLTUSERHOME="${PWD}"
-fi
+mkdir -p .source
+mv * .source/
 
-for file in "${@}"; do
-	case "${file}" in
-		(*.tgz) true;;
-		(*) echo "${0##*/}: ${file}: not a .tgz file" >&2; exit 1;;
-	esac
+raco pkg install --force --user --deps fail --copy --name "${1}" .source
 
-	name="$(basename "${file}" .tgz)"
+find .racket/ -type f -name '*.html' \
+       -exec sed -e 's#<script[^>]*/local-user-redirect.js"[^>]*></script>##g' \
+                 -i {} \;
 
-	mkdir -p "${name}"
-	tar -xzf "${file}" -C "${name}"
-
-	raco pkg install --force --user --deps fail --link "${name}"
-
-	find "${name}" -type f -name '*.html' \
-		-exec sed "${html_sed[@]}" -i {} \;
-done
+raco pkg create --format tgz --built --from-install --dest . "${1}"
 
 # EOF
