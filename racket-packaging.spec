@@ -1,5 +1,5 @@
 Name:		racket-packaging
-Version:	1
+Version:	2
 Release:	1%{?dist}
 Summary:	RPM utilities for Racket packaging
 
@@ -34,6 +34,6 @@ rm -rf "${RPM_BUILD_ROOT}"
 %{_rpmconfigdir}/fileattrs/racket.*
 
 %changelog
-* Tue Aug 19 2014 Jan Dvorak <mordae@anilinux.org> - 1-1
+* Fri Sep 05 2014 Jan Dvorak <mordae@anilinux.org> - 2-1
 - Package created.
 

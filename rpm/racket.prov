@@ -22,7 +22,8 @@
   (let* ((path (dirname info-path))
          (info-ref (get-info/full path)))
     (when info-ref
-      (when (info-ref 'collection (λ () #f))
+      (when (or (info-ref 'collection (λ () #f))
+                (regexp-match? #rx"/racket/collects/" info-path))
         (printf "racket(~a)\n" (basename path))))))
 
 
