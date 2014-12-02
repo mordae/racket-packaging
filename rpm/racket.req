@@ -16,14 +16,17 @@
       (for ((dep (info-ref 'deps (λ () null))))
         (match dep
           ((? string?)
-           (printf "racket(~a)\n" dep))
+           (unless (regexp-match? #rx"-natipkg" dep)
+             (printf "racket(~a)\n" dep)))
 
           ((list name '#:platform platform)
            (when (regexp-match? #rx"linux" platform)
-             (printf "racket(~a)\n" name)))
+             (unless (regexp-match? #rx"-natipkg" name)
+               (printf "racket(~a)\n" name))))
 
           ((list name '#:version _)
-           (printf "racket(~a)\n" name)))))))
+           (unless (regexp-match? #rx"-natipkg" name)
+             (printf "racket(~a)\n" name))))))))
 
 
 ; vim:set ft=racket ts=2 sw=2 et:
